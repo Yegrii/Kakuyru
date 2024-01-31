@@ -1,13 +1,5 @@
-/*
-Chalenge 1
-1. How many different dinosaur names are present in the data?
-2. Which was the largest dinosaur? What about missing data in the dataset?
-3. What dinosaur type has the most occurrences in this dataset? Create a visualization (table, bar chart, or equivalent) to display the number of dinosaurs per type. Use the AI assistant to tweak your visualization (colors, labels, title...).
-4. Did dinosaurs get bigger over time? Show the relation between the dinosaur length and their age to illustrate this.
-5. Use the AI assitant to create an interactive map showing each record. 
-6. Any other insights you found during your analysis?
-*/
 
+-- Chalenge 1
 /*
 | occurence_no | The original occurrence number from the Paleobiology Database.
 | name         | The accepted name of the dinosaur (usually the genus name, or the name of the footprint/egg fossil).
@@ -23,11 +15,17 @@ Chalenge 1
 | family       | The taxonomical family of the dinosaur (if known).
 */
 
+/*
+1. How many different dinosaur names are present in the data?
+*/
+-- Uniq Dino in name column
+
 SELECT
-    *
+    COUNT(DISTINCT name) AS uniq_dino
 FROM
-    dinosaurs
-LIMIT 10;
+    dinosaurs;
+
+-- 1042 Uniq dinosaurs in table
 
 -- Missing values in name column
 SELECT
@@ -35,16 +33,33 @@ SELECT
 FROM
     dinosaurs
 WHERE
-    name IS NULL;
+    name IS NULL 
+    OR name = 'null';
 
--- Uniq Dino in name column
--- (How many different dinosaur names are present in the data?)
--- 1042 Uniq dinosaurs in table
+/*
+2. Which was the largest dinosaur? What about missing data in the dataset?
+*/
 
-SELECT
-    COUNT(DISTINCT name) AS uniq_dino
-FROM
-    dinosaurs;
+-- Displaying the description (structure) of a table in the database.
+DESC dinosaurs;
+
+-- Creating a new column:
+ALTER TABLE dinosaurs
+ADD COLUMN length_m_new DOUBLE;
+
+-- Update the string from 'null' to NULL:
+UPDATE dinosaurs
+SET length_m_new = NULL
+WHERE length_m = 'null';
+
+-- Processing strings that cannot be converted to DOUBLE:
+UPDATE dinosaurs
+SET length_m_new = 0
+WHERE length_m IS NULL OR NOT length_m REGEXP '^-?[0-9]+(\.[0-9]+)?$';
+
+-- Update the remaining values:
+UPDATE dinosaurs
+SET length_m_new = CAST(length_m AS DOUBLE);
 
 -- Which was the largest dinosaur?
 -- Supersaurus 35 meters
@@ -62,12 +77,8 @@ ORDER BY
     biggest_dino DESC
 LIMIT 1;
 
-DESC dinosaurs;
---------------------
-
 /*
-What dinosaur type has the most occurrences in this dataset?
-Create a visualization (table, bar chart, or equivalent) to display the number of dinosaurs per type. 
+3. What dinosaur type has the most occurrences in this dataset? Create a visualization (table, bar chart, or equivalent) to display the number of dinosaurs per type. 
 Use the AI assistant to tweak your visualization (colors, labels, title...)
 */
 
@@ -82,3 +93,23 @@ GROUP BY
     type 
 ORDER BY
     2 DESC;
+
+/*
+4. Did dinosaurs get bigger over time? Show the relation between the dinosaur length and their age to illustrate this.
+*/
+
+/*
+5. Use the AI assitant to create an interactive map showing each record.
+*/
+
+/*
+6. Any other insights you found during your analysis?
+*/
+
+
+
+SELECT
+    *
+FROM
+    dinosaurs
+LIMIT 10;
