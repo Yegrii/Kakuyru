@@ -93,10 +93,26 @@ GROUP BY
     type 
 ORDER BY
     2 DESC;
+-- type column contains 1355 missing values
 
 /*
 4. Did dinosaurs get bigger over time? Show the relation between the dinosaur length and their age to illustrate this.
 */
+
+SELECT
+    type,
+    ROUND((max_ma + min_ma) / 2) AS time_interval,
+    ROUND(AVG(length_m_new), 2) AS average_dinosaur_length
+FROM
+    dinosaurs
+WHERE
+    length_m_new IS NOT NULL
+    AND type = 'armored dinosaur'
+GROUP BY
+    type, time_interval
+ORDER BY
+    type, time_interval;
+
 
 /*
 5. Use the AI assitant to create an interactive map showing each record.
