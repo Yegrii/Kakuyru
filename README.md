@@ -62,7 +62,41 @@ ORDER BY
 LIMIT 1;
 ```
 
-3. What dinosaur type has the most occurrences in this dataset? Create a visualization (table, bar chart, or equivalent) to display the number of dinosaurs per type. Use the AI assistant to tweak your visualization (colors, labels, title...).
+3. What dinosaur type has the most occurrences in this dataset? Create a visualization (table, bar chart, or equivalent) to display the number of dinosaurs per type. Use the AI assistant to tweak your visualization (colors, labels, title...)
+
+Check the type column for 'null' text values:
+```SQL
+SELECT 
+	COUNT(*)
+FROM 
+	dinosaurs d
+WHERE 
+	type = 'null';
+```
+1355 rows with incorrect data, it is necessary to replace them with NULL:
+```SQL
+UPDATE dinosaurs 
+SET type = NULL
+WHERE type = 'null';
+```
+```SQL
+SELECT
+    type,
+    COUNT(*) AS "Number of Dinosaurs"
+FROM
+    dinosaurs
+WHERE
+    type IS NOT NULL
+GROUP BY
+    type 
+ORDER BY
+    2 DESC;
+```
+
+![Azure_Dino](https://github.com/Yegrii/Kakuyru/assets/30467268/823454ff-b0b1-4272-a3ec-182473fedc1b)
+
+
+
 4. Did dinosaurs get bigger over time? Show the relation between the dinosaur length and their age to illustrate this.
 5. Use the AI assitant to create an interactive map showing each record. 
 6. Any other insights you found during your analysis?
