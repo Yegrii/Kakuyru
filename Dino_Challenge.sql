@@ -70,7 +70,6 @@ FROM
     dinosaurs
 WHERE
     length_m_new IS NOT NULL
-    OR length_m_new != 'null'
 GROUP BY
     name
 ORDER BY
@@ -82,13 +81,17 @@ LIMIT 1;
 Use the AI assistant to tweak your visualization (colors, labels, title...)
 */
 
+UPDATE dinosaurs 
+SET type  = NULL
+WHERE type = 'null';
+
 SELECT
     type,
     COUNT(*) AS "Number of Dinosaurs"
 FROM
     dinosaurs
 WHERE
-    type != 'null'
+    type IS NOT NULL
 GROUP BY
     type 
 ORDER BY
@@ -122,10 +125,3 @@ ORDER BY
 6. Any other insights you found during your analysis?
 */
 
-
-
-SELECT
-    *
-FROM
-    dinosaurs
-LIMIT 10;
